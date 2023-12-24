@@ -46,7 +46,7 @@ class ZenohCppConan(ConanFile):
         git.checkout(commit=sources["commit"])
 
     def requirements(self):
-        self.requires("zenoh-c/{}@camposs/stable".format(self._version))
+        self.requires("zenoh-c/{}@camposs/stable".format(self._version), transitive_libs=True, transitive_headers=True)
 
     def generate(self):
         tc = CMakeToolchain(self)
