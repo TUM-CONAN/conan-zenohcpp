@@ -12,7 +12,7 @@ import os
 class ZenohCppConan(ConanFile):
 
     name = "zenoh-cpp"
-    _version = "0.10.1-rc"
+    _version = "0.11.0"
     revision = ""
     version = _version+revision
 
