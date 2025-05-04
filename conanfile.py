@@ -12,7 +12,7 @@ import os
 class ZenohCppConan(ConanFile):
 
     name = "zenoh-cpp"
-    _version = "0.11.0"
+    _version = "1.3.4"
     revision = ""
     version = _version+revision
 
@@ -65,6 +65,8 @@ class ZenohCppConan(ConanFile):
         tc.generate()
 
         deps = CMakeDeps(self)
+        deps.set_property("zenoh-c", "cmake_file_name", "zenohc")
+        deps.set_property("zenoh-c", "cmake_target_name", "zenohc::lib")
         deps.generate()
 
     def layout(self):
@@ -72,22 +74,23 @@ class ZenohCppConan(ConanFile):
 
     def build(self):
 
-        if self.settings.os == "Windows" or self.settings.os == "WindowsStore":
-            replace_in_file(self, os.path.join(self.source_folder, "include", "zenohcxx", "api.hxx"),
-                """const IterDriver* _iter_driver = static_cast<const IterDriver*>(data);""",
-                """const IterDriver* __iter_driver = static_cast<const IterDriver*>(data);""")
-            replace_in_file(self, os.path.join(self.source_folder, "include", "zenohcxx", "api.hxx"),
-                """return (*_iter_driver)([&body, &ctx](const BytesView& key, const BytesView& value) {""",
-                """return (*__iter_driver)([&body, &ctx](const BytesView& key, const BytesView& value) {""")
-            replace_in_file(self, os.path.join(self.source_folder, "include", "zenohcxx", "api.hxx"),
-                """const T* pair_container = static_cast<const T*>(data);""",
-                """const T* _pair_container = static_cast<const T*>(data);""")
-            replace_in_file(self, os.path.join(self.source_folder, "include", "zenohcxx", "api.hxx"),
-                """for (const auto& it : *pair_container) {""",
-                """for (const auto& it : *_pair_container) {""")
+        # @todo: still needed?
+        # if self.settings.os == "Windows" or self.settings.os == "WindowsStore":
+        #     replace_in_file(self, os.path.join(self.source_folder, "include", "zenohcxx", "api.hxx"),
+        #         """const IterDriver* _iter_driver = static_cast<const IterDriver*>(data);""",
+        #         """const IterDriver* __iter_driver = static_cast<const IterDriver*>(data);""")
+        #     replace_in_file(self, os.path.join(self.source_folder, "include", "zenohcxx", "api.hxx"),
+        #         """return (*_iter_driver)([&body, &ctx](const BytesView& key, const BytesView& value) {""",
+        #         """return (*__iter_driver)([&body, &ctx](const BytesView& key, const BytesView& value) {""")
+        #     replace_in_file(self, os.path.join(self.source_folder, "include", "zenohcxx", "api.hxx"),
+        #         """const T* pair_container = static_cast<const T*>(data);""",
+        #         """const T* _pair_container = static_cast<const T*>(data);""")
+        #     replace_in_file(self, os.path.join(self.source_folder, "include", "zenohcxx", "api.hxx"),
+        #         """for (const auto& it : *pair_container) {""",
+        #         """for (const auto& it : *_pair_container) {""")
 
         cmake = CMake(self)
-        cmake.configure(build_script_folder=os.path.join(self.source_folder, "install"))
+        cmake.configure()
         cmake.build()
 
     def package(self):
