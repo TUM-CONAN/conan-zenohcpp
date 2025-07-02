@@ -1,6 +1,6 @@
-# conan-small-gicp
+# conan-zenoh-cpp
 
 
-[Conan.io](https://conan.io) package for [small_gicp](https://github.com/koide3/small_gicp) project
+[Conan.io](https://conan.io) package for [zenoh-cpp](https://github.com/eclipse-zenoh/zenoh-cpp) project
 
 
